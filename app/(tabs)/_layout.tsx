@@ -72,6 +72,13 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="info"
+        options={{
+          href: null,
+          headerShown: false,
+        }}
+      />
     </Tabs>
   );
 }

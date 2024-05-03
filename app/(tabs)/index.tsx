@@ -1,4 +1,5 @@
 import { SearchInput } from "@/components/SearchInput";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -57,7 +58,10 @@ export default function Home() {
             showsVerticalScrollIndicator={false}
             keyExtractor={(item: any) => item.id}
             renderItem={({ item }) => (
-              <TouchableOpacity className="flex-1 items-center justify-center rounded-xl">
+              <TouchableOpacity
+                className="flex-1 items-center justify-center rounded-xl"
+                onPress={() => router.push(`/hero/${"asudhas"}`)}
+              >
                 <Image
                   source={require("../../assets/images/banner.png")}
                   resizeMode="cover"

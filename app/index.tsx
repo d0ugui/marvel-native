@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function App() {
   return (
     <SafeAreaView className="bg-[#1C1833]">
-      <View className="px-8 py-8 flex-col items-center justify-center h-full relative">
+      <View className="p-8 flex-col items-center justify-center h-full relative">
         <Image
           source={require("../assets/images/shield.png")}
           className="w-60 h-60"
