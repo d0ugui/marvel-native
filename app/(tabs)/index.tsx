@@ -35,8 +35,8 @@ export default function Home() {
   ];
 
   return (
-    <SafeAreaView className="bg-[#1C1833] px-6">
-      <View className="h-full items-center mt-4">
+    <SafeAreaView className="bg-[#1C1833]">
+      <View className="h-full items-center mt-4 px-6">
         <Image
           source={require("../../assets/images/marvel-studios-logo.png")}
           resizeMode="contain"
