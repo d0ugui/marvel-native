@@ -3,7 +3,14 @@ import { CharactersProps } from "@/interfaces/characters";
 import { getAll } from "@/services/charactersService/getAll";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
@@ -48,6 +55,14 @@ export default function Home() {
       setIsLoading(false);
     })();
   }, []);
+
+  if (isLoading) {
+    return (
+      <SafeAreaView className="bg-[#1C1833] items-center justify-center h-full">
+        <ActivityIndicator size="large" color="#E51421" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="bg-[#1C1833]">
