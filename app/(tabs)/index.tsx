@@ -14,32 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
-  const heroes = [
-    {
-      id: 1,
-      name: "Capitao America",
-    },
-    {
-      id: 2,
-      name: "Homem Aranha",
-    },
-    {
-      id: 3,
-      name: "Batman",
-    },
-    {
-      id: 4,
-      name: "Batman",
-    },
-    {
-      id: 5,
-      name: "Batman",
-    },
-    {
-      id: 6,
-      name: "Batman",
-    },
-  ];
+  const [error, setError] = useState<null | string>(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [charactersData, setCharactersData] = useState<[] | CharactersProps[]>(
@@ -48,18 +23,27 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      setIsLoading(true);
-      const res = await getAll();
-
-      setCharactersData(res);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const res = await getAll();
+        setCharactersData(res);
+      } catch (error) {
+        setError("Ocorreu um erro ao estabelecer conexão com a API.");
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, []);
 
-  if (isLoading) {
+  if (isLoading || error) {
     return (
       <SafeAreaView className="bg-[#1C1833] items-center justify-center h-full">
-        <ActivityIndicator size="large" color="#E51421" />
+        {isLoading && <ActivityIndicator size="large" color="#E51421" />}
+        {error && (
+          <Text className="text-white font-psemibold text-2xl w-full text-center">
+            {error}
+          </Text>
+        )}
       </SafeAreaView>
     );
   }
