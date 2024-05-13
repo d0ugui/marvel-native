@@ -4,9 +4,9 @@ import { httpClient } from "../httpClient";
 export async function getAll() {
   const {
     data: {
-      data: { results },
+      data: { results: characters },
     },
   } = await httpClient.get("characters");
 
-  return results as CharactersProps[];
+  return characters as CharactersProps[];
 }

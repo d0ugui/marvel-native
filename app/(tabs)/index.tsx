@@ -25,8 +25,8 @@ export default function Home() {
     (async () => {
       try {
         setIsLoading(true);
-        const res = await getAll();
-        setCharactersData(res);
+        const characters = await getAll();
+        setCharactersData(characters);
       } catch (error) {
         setError("Ocorreu um erro ao estabelecer conexão com a API.");
       } finally {
@@ -71,7 +71,7 @@ export default function Home() {
             renderItem={({ item }) => (
               <TouchableOpacity
                 className="flex-1 items-center justify-center rounded-md"
-                onPress={() => router.push(`/hero/${"asudhas"}`)}
+                onPress={() => router.push(`/hero/${item.id}`)}
               >
                 <Image
                   source={
