@@ -70,7 +70,7 @@ export default function Home() {
         <View className="w-full mt-6 h-[85%]">
           <FlatList
             data={charactersData}
-            numColumns={2}
+            numColumns={3}
             columnWrapperStyle={{ gap: 16 }}
             contentContainerStyle={{ gap: 16, paddingBottom: 20 }}
             showsVerticalScrollIndicator={false}

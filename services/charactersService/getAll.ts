@@ -6,7 +6,7 @@ export async function getAll(page: number) {
     data: {
       data: { results: characters },
     },
-  } = await httpClient.get(`characters?offset=${page * 10}`);
+  } = await httpClient.get(`characters?offset=${page * 12}`);
 
   return characters as CharactersProps[];
 }

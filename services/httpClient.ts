@@ -6,6 +6,6 @@ export const httpClient = axios.create({
     ts: 1,
     apikey: process.env.EXPO_PUBLIC_API_KEY,
     hash: process.env.EXPO_PUBLIC_API_HASH,
-    limit: 10,
+    limit: 12,
   },
 });
