@@ -15,18 +15,26 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
   const [error, setError] = useState<null | string>(null);
-
+  const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [charactersData, setCharactersData] = useState<[] | CharactersProps[]>(
     []
   );
 
+  async function getCharacters() {
+    const characters = await getAll(page);
+
+    if (characters) {
+      setCharactersData((prevState) => [...prevState, ...characters]);
+      setPage((prevState) => prevState + 1);
+    }
+  }
+
   useEffect(() => {
     (async () => {
       try {
         setIsLoading(true);
-        const characters = await getAll();
-        setCharactersData(characters);
+        await getCharacters();
       } catch (error) {
         setError("Ocorreu um erro ao estabelecer conexão com a API.");
       } finally {
@@ -59,11 +67,11 @@ export default function Home() {
 
         <SearchInput />
 
-        <View className="w-full mt-6">
+        <View className="w-full mt-6 h-[85%]">
           <FlatList
             data={charactersData}
             numColumns={2}
-            columnWrapperStyle={{ gap: 16, paddingHorizontal: 0 }}
+            columnWrapperStyle={{ gap: 16 }}
             contentContainerStyle={{ gap: 16, paddingBottom: 20 }}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item: any) => item.id}
@@ -97,6 +105,9 @@ export default function Home() {
                 Personagens
               </Text>
             )}
+            ListFooterComponent={() => <ActivityIndicator size={"large"} />}
+            onEndReached={getCharacters}
+            onEndReachedThreshold={0.1}
           />
         </View>
       </View>
