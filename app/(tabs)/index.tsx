@@ -1,16 +1,11 @@
+import { ErrorText } from "@/components/ErrorText";
 import { SearchInput } from "@/components/SearchInput";
+import { Spinner } from "@/components/Spinner";
 import { CharactersProps } from "@/interfaces/characters";
 import { getAll } from "@/services/charactersService/getAll";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
@@ -46,12 +41,8 @@ export default function Home() {
   if (isLoading || error) {
     return (
       <SafeAreaView className="bg-[#1C1833] items-center justify-center h-full">
-        {isLoading && <ActivityIndicator size="large" color="#E51421" />}
-        {error && (
-          <Text className="text-white font-psemibold text-2xl w-full text-center">
-            {error}
-          </Text>
-        )}
+        {isLoading && <Spinner />}
+        {error && <ErrorText message={error} />}
       </SafeAreaView>
     );
   }
@@ -105,7 +96,7 @@ export default function Home() {
                 Personagens
               </Text>
             )}
-            ListFooterComponent={() => <ActivityIndicator size={"large"} />}
+            ListFooterComponent={<Spinner />}
             onEndReached={getCharacters}
             onEndReachedThreshold={0.1}
           />

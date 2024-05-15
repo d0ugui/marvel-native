@@ -1,17 +1,12 @@
+import { ErrorText } from "@/components/ErrorText";
 import { SearchInput } from "@/components/SearchInput";
+import { Spinner } from "@/components/Spinner";
 import { CharactersProps } from "@/interfaces/characters";
 import { charactersService } from "@/services/charactersService";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Search() {
@@ -46,12 +41,8 @@ export default function Search() {
   if (isFirstLoading || error) {
     return (
       <SafeAreaView className="bg-[#1C1833] items-center justify-center h-full">
-        {isLoading && <ActivityIndicator size="large" color="#E51421" />}
-        {error && (
-          <Text className="text-white font-psemibold text-2xl w-full text-center">
-            {error}
-          </Text>
-        )}
+        {isLoading && <Spinner />}
+        {error && <ErrorText message={error} />}
       </SafeAreaView>
     );
   }
@@ -67,7 +58,7 @@ export default function Search() {
             <Text className="text-2xl font-psemibold text-white">{query}</Text>
           </View>
 
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.push("/(tabs)/")}>
             <FontAwesome name="home" size={32} color="#CDCDE0" />
           </TouchableOpacity>
         </View>
@@ -76,7 +67,7 @@ export default function Search() {
 
         <View className="w-full mt-6">
           {isLoading ? (
-            <ActivityIndicator size="large" color="#E51421" />
+            <Spinner />
           ) : (
             <FlatList
               data={heroResults}

@@ -1,3 +1,5 @@
+import { ErrorText } from "@/components/ErrorText";
+import { Spinner } from "@/components/Spinner";
 import { CharactersProps } from "@/interfaces/characters";
 import { CharactersSeriesProps } from "@/interfaces/series";
 import { charactersService } from "@/services/charactersService";
@@ -5,14 +7,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Info() {
@@ -45,12 +40,8 @@ export default function Info() {
   if (isLoading || error) {
     return (
       <SafeAreaView className="bg-[#1C1833] items-center justify-center h-full">
-        {isLoading && <ActivityIndicator size="large" color="#E51421" />}
-        {error && (
-          <Text className="text-white font-psemibold text-2xl w-full text-center">
-            {error}
-          </Text>
-        )}
+        {isLoading && <Spinner />}
+        {error && <ErrorText message={error} />}
       </SafeAreaView>
     );
   }
