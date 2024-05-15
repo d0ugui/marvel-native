@@ -3,6 +3,7 @@ import { Spinner } from "@/components/Spinner";
 import { CharactersProps } from "@/interfaces/characters";
 import { CharactersSeriesProps } from "@/interfaces/series";
 import { charactersService } from "@/services/charactersService";
+import { useFavoriteStore } from "@/store/favoriteStore";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -11,6 +12,7 @@ import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Info() {
+  const favoriteStore = useFavoriteStore();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState(true);
   const [characterInfo, setCharacterInfo] = useState<CharactersProps>();
@@ -53,6 +55,20 @@ export default function Info() {
           <View className="flex-row items-center justify-between mb-6">
             <TouchableOpacity onPress={() => router.back()}>
               <AntDesign name="arrowleft" size={24} color="white" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => router.push("/(tabs)/bookmarks")}
+              className="relative"
+            >
+              <AntDesign name="heart" size={24} color="#E51421" />
+              {favoriteStore.favoriteCharacters.length > 0 && (
+                <View className="rounded-full h-[18px] w-[18px] text-xs items-center justify-center bg-white font-psemibold absolute -bottom-1 -left-1">
+                  <Text className=" text-black">
+                    {favoriteStore.favoriteCharacters.length}
+                  </Text>
+                </View>
+              )}
             </TouchableOpacity>
           </View>
 
@@ -107,7 +123,10 @@ export default function Info() {
             />
           </View>
 
-          <TouchableOpacity className="w-full rounded-[50px] bg-red-500 h-14 items-center justify-center mt-10">
+          <TouchableOpacity
+            className="w-full rounded-[50px] bg-red-500 h-14 items-center justify-center mt-10"
+            onPress={() => favoriteStore.add(characterInfo!)}
+          >
             <Text className="text-white font-psemibold text-lg">
               Adicionar aos favoritos
             </Text>
