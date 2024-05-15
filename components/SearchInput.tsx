@@ -31,7 +31,7 @@ export function SearchInput({ initialQuery }: FormFieldProps) {
       <TouchableOpacity
         onPress={() => {
           if (!query) {
-            Alert.alert(
+            return Alert.alert(
               "Dados incorretos",
               "Preencha o campo de busca para realizar a busca"
             );

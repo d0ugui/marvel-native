@@ -1,38 +1,60 @@
 import { SearchInput } from "@/components/SearchInput";
+import { CharactersProps } from "@/interfaces/characters";
+import { charactersService } from "@/services/charactersService";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router, useLocalSearchParams } from "expo-router";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const heroes = [
-  {
-    id: 1,
-    name: "Capitao America",
-  },
-  {
-    id: 2,
-    name: "Homem Aranha",
-  },
-  {
-    id: 3,
-    name: "Batman",
-  },
-  {
-    id: 4,
-    name: "Batman",
-  },
-  {
-    id: 5,
-    name: "Batman",
-  },
-  {
-    id: 6,
-    name: "Batman",
-  },
-];
-
 export default function Search() {
+  const [heroResults, setHeroResults] = useState<CharactersProps[] | undefined>(
+    undefined
+  );
   const { query } = useLocalSearchParams<{ query: string }>();
+  const [isFirstLoading, setIsFirstLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  async function getCharactersBySearchParams() {
+    const results = await charactersService.getByName(query);
+
+    setHeroResults(results);
+  }
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setIsLoading(true);
+        await getCharactersBySearchParams();
+      } catch (error) {
+        setError("Ocorreu um buscar os dados da query.");
+      } finally {
+        setIsLoading(false);
+        setIsFirstLoading(false);
+      }
+    })();
+  }, [query]);
+
+  if (isFirstLoading || error) {
+    return (
+      <SafeAreaView className="bg-[#1C1833] items-center justify-center h-full">
+        {isLoading && <ActivityIndicator size="large" color="#E51421" />}
+        {error && (
+          <Text className="text-white font-psemibold text-2xl w-full text-center">
+            {error}
+          </Text>
+        )}
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="bg-[#1C1833]">
@@ -53,29 +75,39 @@ export default function Search() {
         <SearchInput initialQuery={query} />
 
         <View className="w-full mt-6">
-          <FlatList
-            data={heroes}
-            numColumns={2}
-            columnWrapperStyle={{ gap: 16, paddingHorizontal: 0 }}
-            contentContainerStyle={{ gap: 16, paddingBottom: 20 }}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item: any) => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                className="flex-1 items-center justify-center rounded-xl"
-                onPress={() => router.push(`/hero/${"asudhas"}`)}
-              >
-                <Image
-                  source={require("../../assets/images/banner.png")}
-                  resizeMode="cover"
-                  className="w-full h-[180px] rounded-2xl relative"
-                />
-                <Text className="text-white text-xl font-psemibold text-start mt-2">
-                  3D Man
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#E51421" />
+          ) : (
+            <FlatList
+              data={heroResults}
+              numColumns={3}
+              columnWrapperStyle={{ gap: 16, paddingHorizontal: 0 }}
+              contentContainerStyle={{ gap: 16, paddingBottom: 20 }}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item: any) => item.id}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  className="flex-1 items-center justify-center rounded-xl"
+                  onPress={() => router.push(`/hero/${item.id}`)}
+                >
+                  <Image
+                    source={
+                      item.thumbnail.path.includes("image_not_available")
+                        ? require("../../assets/images/not-found.jpg")
+                        : {
+                            uri: `${item.thumbnail.path}.${item.thumbnail.extension}`,
+                          }
+                    }
+                    resizeMode="cover"
+                    className="w-full h-[180px] rounded-2xl relative"
+                  />
+                  <Text className="text-white text-xl font-psemibold text-start mt-2">
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+          )}
         </View>
       </View>
     </SafeAreaView>
