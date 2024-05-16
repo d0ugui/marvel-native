@@ -1,3 +1,4 @@
+import { EmptyState } from "@/components/EmptyState";
 import { ErrorText } from "@/components/ErrorText";
 import { SearchInput } from "@/components/SearchInput";
 import { Spinner } from "@/components/Spinner";
@@ -97,6 +98,9 @@ export default function Search() {
                   </Text>
                 </TouchableOpacity>
               )}
+              ListEmptyComponent={
+                <EmptyState message="A busca não obteve resultados." />
+              }
             />
           )}
         </View>

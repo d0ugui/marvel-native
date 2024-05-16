@@ -1,3 +1,4 @@
+import { EmptyState } from "@/components/EmptyState";
 import { useFavoriteStore } from "@/store/favoriteStore";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
@@ -54,6 +55,9 @@ export default function Bookmarks() {
               </TouchableOpacity>
             </View>
           )}
+          ListEmptyComponent={
+            <EmptyState message="Você não selecionou nenhum personagem como favorito." />
+          }
         />
       </View>
     </SafeAreaView>

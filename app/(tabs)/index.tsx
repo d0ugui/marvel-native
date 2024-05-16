@@ -1,3 +1,4 @@
+import { EmptyState } from "@/components/EmptyState";
 import { ErrorText } from "@/components/ErrorText";
 import { SearchInput } from "@/components/SearchInput";
 import { Spinner } from "@/components/Spinner";
@@ -59,47 +60,53 @@ export default function Home() {
         <SearchInput />
 
         <View className="w-full mt-6 h-[85%]">
-          <FlatList
-            data={charactersData}
-            numColumns={3}
-            columnWrapperStyle={{ gap: 16 }}
-            contentContainerStyle={{ gap: 16, paddingBottom: 20 }}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item: any) => item.id}
-            className="max-h-[97%]"
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                className="flex-1 items-center justify-center rounded-md"
-                onPress={() => router.push(`/hero/${item.id}`)}
-              >
-                <Image
-                  source={
-                    item.thumbnail.path.includes("image_not_available")
-                      ? require("../../assets/images/not-found.jpg")
-                      : {
-                          uri: `${item.thumbnail.path}.${item.thumbnail.extension}`,
-                        }
-                  }
-                  resizeMode="cover"
-                  className="w-full h-[140px] rounded-2xl relative"
-                />
-                <Text
-                  className="text-white text-xl font-psemibold mt-2 text-center"
-                  numberOfLines={1}
+          {charactersData.length > 0 ? (
+            <FlatList
+              data={charactersData}
+              numColumns={3}
+              columnWrapperStyle={{ gap: 16 }}
+              contentContainerStyle={{ gap: 16, paddingBottom: 20 }}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item: any) => item.id}
+              className="max-h-[97%]"
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  className="flex-1 items-center justify-center rounded-md"
+                  onPress={() => router.push(`/hero/${item.id}`)}
                 >
-                  {item.name}
+                  <Image
+                    source={
+                      item.thumbnail.path.includes("image_not_available")
+                        ? require("../../assets/images/not-found.jpg")
+                        : {
+                            uri: `${item.thumbnail.path}.${item.thumbnail.extension}`,
+                          }
+                    }
+                    resizeMode="cover"
+                    className="w-full h-[140px] rounded-2xl relative"
+                  />
+                  <Text
+                    className="text-white text-xl font-psemibold mt-2 text-center"
+                    numberOfLines={1}
+                  >
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              ListHeaderComponent={() => (
+                <Text className="text-white font-psemibold text-2xl text-start w-full">
+                  Personagens
                 </Text>
-              </TouchableOpacity>
-            )}
-            ListHeaderComponent={() => (
-              <Text className="text-white font-psemibold text-2xl text-start w-full">
-                Personagens
-              </Text>
-            )}
-            ListFooterComponent={<Spinner />}
-            onEndReached={getCharacters}
-            onEndReachedThreshold={0.1}
-          />
+              )}
+              ListFooterComponent={
+                charactersData.length > 0 ? <Spinner /> : null
+              }
+              onEndReached={getCharacters}
+              onEndReachedThreshold={0.1}
+            />
+          ) : (
+            <EmptyState message="A busca não obteve resultados." />
+          )}
         </View>
       </View>
     </SafeAreaView>
