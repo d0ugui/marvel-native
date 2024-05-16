@@ -1,4 +1,5 @@
 import { ErrorText } from "@/components/ErrorText";
+import { HeroImage } from "@/components/HeroImage";
 import { Spinner } from "@/components/Spinner";
 import { CharactersProps } from "@/interfaces/characters";
 import { CharactersSeriesProps } from "@/interfaces/series";
@@ -8,7 +9,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Info() {
@@ -72,16 +73,9 @@ export default function Info() {
             </TouchableOpacity>
           </View>
 
-          <Image
-            source={
-              characterInfo?.thumbnail.path.includes("image_not_available")
-                ? require("../../assets/images/not-found.jpg")
-                : {
-                    uri: `${characterInfo?.thumbnail.path}.${characterInfo?.thumbnail.extension}`,
-                  }
-            }
-            resizeMode="cover"
-            className="w-full h-[300px] rounded-2xl bg-red-500"
+          <HeroImage
+            thumbnail={characterInfo?.thumbnail!}
+            otherStyles="w-full h-[300px]"
           />
 
           <Text className="text-white font-pbold text-2xl text-center mt-4">
@@ -105,16 +99,10 @@ export default function Info() {
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <TouchableOpacity className="flex-1 items-center justify-center w-[140px] h-[140px]">
-                  <Image
-                    source={
-                      item.thumbnail.path.includes("image_not_available")
-                        ? require("../../assets/images/not-found.jpg")
-                        : {
-                            uri: `${item.thumbnail.path}.${item.thumbnail.extension}`,
-                          }
-                    }
+                  <HeroImage
+                    thumbnail={item.thumbnail}
                     resizeMode="contain"
-                    className="w-full h-full rounded-2xl bg-white"
+                    otherStyles="w-full h-full rounded-2xl bg-white"
                   />
                 </TouchableOpacity>
               )}

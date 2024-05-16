@@ -1,5 +1,6 @@
 import { EmptyState } from "@/components/EmptyState";
 import { ErrorText } from "@/components/ErrorText";
+import { HeroImage } from "@/components/HeroImage";
 import { SearchInput } from "@/components/SearchInput";
 import { Spinner } from "@/components/Spinner";
 import { CharactersProps } from "@/interfaces/characters";
@@ -74,16 +75,9 @@ export default function Home() {
                   className="flex-1 items-center justify-center rounded-md"
                   onPress={() => router.push(`/hero/${item.id}`)}
                 >
-                  <Image
-                    source={
-                      item.thumbnail.path.includes("image_not_available")
-                        ? require("../../assets/images/not-found.jpg")
-                        : {
-                            uri: `${item.thumbnail.path}.${item.thumbnail.extension}`,
-                          }
-                    }
-                    resizeMode="cover"
-                    className="w-full h-[140px] rounded-2xl relative"
+                  <HeroImage
+                    thumbnail={item.thumbnail}
+                    otherStyles="w-full h-[140px]"
                   />
                   <Text
                     className="text-white text-xl font-psemibold mt-2 text-center"
