@@ -9,14 +9,14 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Info() {
   const favoriteStore = useFavoriteStore();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState(true);
-  const [characterInfo, setCharacterInfo] = useState<CharactersProps>();
+  const [character, setCharacter] = useState<CharactersProps>();
   const [error, setError] = useState("");
   const [series, setSeries] = useState<CharactersSeriesProps[]>();
 
@@ -31,7 +31,7 @@ export default function Info() {
         ]);
 
         setSeries(series);
-        setCharacterInfo(character);
+        setCharacter(character);
       } catch (error) {
         setError("Ocorreu um erro ao buscar os dados do personagem.");
       } finally {
@@ -47,6 +47,19 @@ export default function Info() {
         {error && <ErrorText message={error} />}
       </SafeAreaView>
     );
+  }
+
+  function addNewFavoriteCharacter(character: CharactersProps) {
+    if (
+      favoriteStore.favoriteCharacters.find((item) => item.id === character.id)
+    ) {
+      return Alert.alert(
+        "Este personagem já existe",
+        "O personagem selecionado já foi adicionado."
+      );
+    }
+
+    favoriteStore.add(character);
   }
 
   return (
@@ -74,20 +87,18 @@ export default function Info() {
           </View>
 
           <HeroImage
-            thumbnail={characterInfo?.thumbnail!}
+            thumbnail={character?.thumbnail!}
             otherStyles="w-full h-[300px]"
           />
 
           <Text className="text-white font-pbold text-2xl text-center mt-4">
-            {characterInfo?.name}
+            {character?.name}
           </Text>
           <Text
             className="mt-2 text-[#CDCDE0] text-center text-base"
             numberOfLines={4}
           >
-            {characterInfo?.description
-              ? characterInfo.description
-              : "Sem descrição!"}
+            {character?.description ? character.description : "Sem descrição!"}
           </Text>
         </View>
 
@@ -113,7 +124,7 @@ export default function Info() {
 
           <TouchableOpacity
             className="w-full rounded-[50px] bg-red-500 h-14 items-center justify-center mt-10"
-            onPress={() => favoriteStore.add(characterInfo!)}
+            onPress={() => addNewFavoriteCharacter(character!)}
           >
             <Text className="text-white font-psemibold text-lg">
               Adicionar aos favoritos
