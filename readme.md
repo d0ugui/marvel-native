@@ -4,7 +4,7 @@
 
 # Marvel Native
 
-O objetivo dessa aplicação foi colocar em prática alguns conhecimentos de React Native utilizando o ambiente Expo (principalmente expo-router). A aplicação estabelece conexão com a Marvel API e permite ao usuário realizar buscar e favoritar personagens.
+O objetivo desse projeto foi colocar em prática alguns conhecimentos de React Native utilizando o ambiente Expo e suas ferramentas (principalmente o expo-router). A aplicação estabelece conexão com a Marvel API e permite ao usuário realizar buscas e favoritar personagens. O layout foi idealizado por mim e construído utilizando Nativewind.
 
 ## Tech Stack
 
